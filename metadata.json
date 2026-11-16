@@ -1,0 +1,6 @@
+{
+  "name": "iBAS Sahayak",
+  "description": "Manual iBAS++ companion for Bangladesh government service holders: Pay Bill copy, GPF, Pension & Arrear calculators, and official Leave & Joining applications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
