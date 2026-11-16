@@ -1,18 +1,35 @@
-*.iml
-.gradle
-.kotlin
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+# Gradle & Build outputs
+.gradle/
+build/
 /build
-/captures
-.externalNativeBuild
-.cxx
+/app/build
+.build-outputs/
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Kotlin & IDE
+.kotlin/
+*.iml
+.idea/
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# Local configuration & Secrets
 local.properties
 .env
+*.jks
+*.keystore
 debug.keystore
+google-services.json
+
+# Native / Profiler
+.externalNativeBuild/
+.cxx/
+captures/
+*.hprof
+output.json
