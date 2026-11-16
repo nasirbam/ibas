@@ -9,10 +9,10 @@ import androidx.compose.ui.unit.sp
 import com.example.R
 
 val OfficialBengaliSerifFamily = FontFamily(
-    Font(R.font.noto_serif_bengali, FontWeight.Normal),
-    Font(R.font.noto_serif_bengali, FontWeight.Medium),
-    Font(R.font.noto_serif_bengali, FontWeight.SemiBold),
-    Font(R.font.noto_serif_bengali, FontWeight.Bold)
+    Font(R.font.nikosh_ban, FontWeight.Normal),
+    Font(R.font.nikosh_ban, FontWeight.Medium),
+    Font(R.font.nikosh_ban, FontWeight.SemiBold),
+    Font(R.font.nikosh_ban, FontWeight.Bold)
 )
 
 val DisplayFontFamily = OfficialBengaliSerifFamily

@@ -64,7 +64,7 @@ object DocumentExporter {
     }
 
     private fun loadOfficialFont(context: Context): Typeface {
-        return ResourcesCompat.getFont(context, R.font.noto_serif_bengali)
+        return ResourcesCompat.getFont(context, R.font.nikosh_ban)
             ?: Typeface.SERIF
     }
 
