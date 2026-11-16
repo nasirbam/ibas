@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iBAS Sahayak — সরকারি চাকরিজীবী সহায়ক</title>
+  <title>iBAS Sahayak — পে-স্কেল ২০২৬ ও সরকারি চাকরিজীবী সহায়ক</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --primary: #0b573d;
@@ -17,14 +20,15 @@
       --muted: #4a5c54;
       --border: #d5ded8;
       --danger: #ba1a1a;
+      --official-font: 'SutonnyOMJ', 'SutonnyMJ', 'SolaimanLipi', 'Kalpurush', 'Noto Serif Bengali', serif;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; font-family: var(--official-font); }
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Bengali", "Hind Siliguri", Roboto, sans-serif;
+      font-family: var(--official-font);
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.55;
     }
     header {
       background: linear-gradient(135deg, var(--primary) 0%, #195e6a 100%);
@@ -32,11 +36,7 @@
       padding: 20px 16px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.12);
     }
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 16px;
-    }
+    .container { max-width: 960px; margin: 0 auto; padding: 16px; }
     .header-inner {
       max-width: 960px;
       margin: 0 auto;
@@ -47,7 +47,7 @@
       gap: 12px;
     }
     .brand h1 { margin: 0; font-size: 1.5rem; }
-    .brand p { margin: 4px 0 0; font-size: 0.9rem; opacity: 0.9; }
+    .brand p { margin: 4px 0 0; font-size: 0.9rem; opacity: 0.92; }
     .header-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     .btn {
       border: none;
@@ -86,11 +86,7 @@
       white-space: nowrap;
       font-size: 0.9rem;
     }
-    .tab-btn.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
     .card {
       background: var(--card);
@@ -110,7 +106,6 @@
     .summary-banner .amount {
       font-size: 2rem;
       font-weight: 700;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       margin: 6px 0;
     }
     .summary-grid {
@@ -141,36 +136,46 @@
       font-size: 0.95rem;
       background: #fff;
       color: var(--text);
-      font-family: inherit;
     }
     .kv-row {
       display: flex;
       justify-content: space-between;
       padding: 7px 0;
       border-bottom: 1px dashed var(--border);
-      font-size: 0.95rem;
+      font-size: 0.96rem;
     }
     .kv-row:last-child { border-bottom: none; }
-    .kv-val { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+    .kv-val { font-weight: 600; }
     .kv-ded { color: var(--danger); }
     .kv-total { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
     .letter-preview {
       background: #fffefa;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 18px;
+      padding: 22px;
       white-space: pre-wrap;
-      font-size: 0.95rem;
-      line-height: 1.65;
+      font-size: 1rem;
+      line-height: 1.75;
     }
     .hidden { display: none !important; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     th, td { padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: left; }
     th { color: var(--muted); font-weight: 700; }
+    .badge {
+      display: inline-block;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
     @media print {
+      * { font-family: var(--official-font) !important; }
       header, .tabs, .no-print { display: none !important; }
-      body { background: #fff; }
-      .card { border: none; box-shadow: none; }
+      body { background: #fff; font-size: 13pt; }
+      .card { border: none; box-shadow: none; padding: 0; }
+      .letter-preview { border: none; background: #fff; padding: 12mm; font-size: 13pt; line-height: 1.8; }
     }
   </style>
 </head>
@@ -178,8 +183,8 @@
   <header>
     <div class="header-inner">
       <div class="brand">
-        <h1>iBAS Sahayak (iBAS সহায়ক)</h1>
-        <p id="subtitle">সরকারি চাকরিজীবীদের ম্যানুয়াল বেতন বিল, জিপিএফ, পেনশন, বকেয়া ও ছুটির আবেদন সহায়ক</p>
+        <h1>iBAS Sahayak — পে-স্কেল ২০২৬</h1>
+        <p id="subtitle">জাতীয় বেতন স্কেল ২০২৬ (S.R.O. 347-Law/2026) অনুযায়ী স্বয়ংক্রিয় বিল, জিপিএফ, পেনশন, বকেয়া ও আবেদনপত্র</p>
       </div>
       <div class="header-actions">
         <button class="btn btn-lang" onclick="toggleLang()" id="langBtn">English</button>
@@ -189,18 +194,19 @@
   </header>
 
   <nav class="tabs no-print">
-    <button class="tab-btn active" onclick="showTab('paybill', this)" data-bn="বেতন বিল কপি" data-en="Pay Bill Copy">বেতন বিল কপি</button>
+    <button class="tab-btn active" onclick="showTab('paybill', this)" data-bn="বেতন বিল ২০২৬" data-en="Pay Bill 2026">বেতন বিল ২০২৬</button>
     <button class="tab-btn" onclick="showTab('gpf', this)" data-bn="জিপিএফ হিসাব" data-en="GPF Calculator">জিপিএফ হিসাব</button>
     <button class="tab-btn" onclick="showTab('pension', this)" data-bn="পেনশন ও গ্র্যাচুইটি" data-en="Pension & PRL">পেনশন ও গ্র্যাচুইটি</button>
     <button class="tab-btn" onclick="showTab('arrear', this)" data-bn="বকেয়া বেতন" data-en="Arrear Calculator">বকেয়া বেতন</button>
     <button class="tab-btn" onclick="showTab('apps', this)" data-bn="ছুটি ও যোগদান আবেদন" data-en="Leave & Joining">ছুটি ও যোগদান আবেদন</button>
+    <button class="tab-btn" onclick="showTab('scale', this)" data-bn="পে-স্কেল ২০২৬ চার্ট" data-en="Pay Scale 2026">পে-স্কেল ২০২৬ চার্ট</button>
   </nav>
 
   <main class="container">
     <!-- PAY BILL TAB -->
     <section id="tab-paybill">
       <div class="summary-banner">
-        <div id="pb-net-label">নিট প্রাপ্য বেতন (Net Payable)</div>
+        <div id="pb-net-label">নিট প্রাপ্য বেতন (পে-স্কেল ২০২৬)</div>
         <div class="amount" id="pb-net">৳ 0</div>
         <div class="summary-grid">
           <div><small>মোট বেতন-ভাতা (Gross)</small><div id="pb-gross" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
@@ -209,14 +215,28 @@
       </div>
 
       <div class="card no-print">
+        <div style="margin-bottom:10px"><span class="badge">স্বয়ংক্রিয় হিসাব — আপনার গ্রেড ও ধাপ বেছে নিলেই সব হিসাব হয়ে যাবে</span></div>
         <div class="grid-2">
+          <div>
+            <label>পে-স্কেল ২০২৬ বাস্তবায়ন পর্যায়</label>
+            <select id="pb-phase" onchange="syncBasicFromStep()">
+              <option value="PHASE1" selected>ফেজ-১: জুলাই–ডিসে. ২০২৬ (৪০%/৫০% বৃদ্ধি)</option>
+              <option value="PHASE2">ফেজ-২: জানু–জুন ২০২৭ (৭০%/৭৫% বৃদ্ধি)</option>
+              <option value="FULL2026">ফেজ-৩: পূর্ণ ২০২৬ স্কেল (১০০%)</option>
+              <option value="OLD2015">পূর্বের ২০১৫ স্কেল</option>
+            </select>
+          </div>
           <div>
             <label>গ্রেড (Grade 1-20)</label>
             <select id="pb-grade" onchange="onGradeChange()"></select>
           </div>
           <div>
-            <label>মূল বেতন (Basic Pay)</label>
-            <input type="number" id="pb-basic" value="22000" oninput="calcPayBill()" />
+            <label>বেতন ধাপ (Step 1-15)</label>
+            <select id="pb-step" onchange="syncBasicFromStep()"></select>
+          </div>
+          <div>
+            <label>প্রাপ্য মূল বেতন (স্বয়ংক্রিয়)</label>
+            <input type="number" id="pb-basic" value="30800" oninput="calcPayBill()" />
           </div>
           <div>
             <label>কর্মস্থল এলাকা (বাড়ি ভাড়া)</label>
@@ -236,6 +256,13 @@
             </select>
           </div>
           <div>
+            <label>চিকিৎসা ভাতা (২০২৬ নিয়ম)</label>
+            <select id="pb-age" onchange="calcPayBill()">
+              <option value="UNDER50" selected>৫০ বছরের নিচে (৳ ৩,০০০)</option>
+              <option value="AGE50PLUS">৫০ বছর বা তদূর্ধ্ব (৳ ৪,০০০)</option>
+            </select>
+          </div>
+          <div>
             <label>জিপিএফ চাঁদা (%)</label>
             <input type="number" id="pb-gpf" value="10" min="0" max="30" oninput="calcPayBill()" />
           </div>
@@ -248,22 +275,22 @@
             </select>
           </div>
           <div>
-            <label>জিপিএফ ঋণ কিস্তি (৳)</label>
-            <input type="number" id="pb-loan" value="0" oninput="calcPayBill()" />
-          </div>
-          <div>
-            <label>আয়কর TDS (৳)</label>
-            <input type="number" id="pb-tax" value="0" oninput="calcPayBill()" />
+            <label>জিপিএফ ঋণ কিস্তি / আয়কর TDS (৳)</label>
+            <div style="display:flex; gap:8px">
+              <input type="number" id="pb-loan" value="0" placeholder="ঋণ" oninput="calcPayBill()" />
+              <input type="number" id="pb-tax" value="0" placeholder="TDS" oninput="calcPayBill()" />
+            </div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <h3 style="margin-top:0">বেতন বিল বিবরণী</h3>
+        <h3 style="margin-top:0">বেতন বিল বিবরণী (২০২৬)</h3>
         <div id="pb-breakdown"></div>
-        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap" class="no-print">
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap" class="no-print">
           <button class="btn btn-primary" onclick="window.print()">প্রিন্ট / সেভ PDF</button>
-          <button class="btn btn-outline" onclick="copyText('pb-breakdown')">কপি করুন</button>
+          <button class="btn btn-outline" onclick="copyText('pb-breakdown')">ইউনিকোড কপি</button>
+          <button class="btn btn-outline" onclick="copySutonny('pb-breakdown')">SutonnyMJ (Bijoy) কপি</button>
         </div>
       </div>
     </section>
@@ -281,7 +308,7 @@
       <div class="card no-print">
         <div class="grid-2">
           <div><label>প্রারম্ভিক জের (১ জুলাই)</label><input type="number" id="gpf-open" value="350000" oninput="calcGpf()" /></div>
-          <div><label>মাসিক চাঁদা (৳)</label><input type="number" id="gpf-sub" value="3000" oninput="calcGpf()" /></div>
+          <div><label>মাসিক চাঁদা (৳)</label><input type="number" id="gpf-sub" value="3080" oninput="calcGpf()" /></div>
           <div><label>মাসিক ঋণ কিস্তি ফেরত (৳)</label><input type="number" id="gpf-rec" value="0" oninput="calcGpf()" /></div>
           <div><label>মুনাফার হার (%)</label><input type="number" id="gpf-rate" value="13" step="0.5" oninput="calcGpf()" /></div>
         </div>
@@ -304,13 +331,14 @@
       </div>
       <div class="card no-print">
         <div class="grid-2">
-          <div><label>শেষ মূল বেতন (Last Basic)</label><input type="number" id="pen-basic" value="45000" oninput="calcPension()" /></div>
+          <div><label>শেষ মূল বেতন (২০২৬ স্কেল)</label><input type="number" id="pen-basic" value="44000" oninput="calcPension()" /></div>
           <div><label>মোট চাকরিকাল (৫-২৫+ বছর)</label><input type="number" id="pen-years" value="25" min="5" max="35" oninput="calcPension()" /></div>
           <div>
-            <label>বয়স</label>
+            <label>বয়স (২০২৬ চিকিৎসা ভাতা)</label>
             <select id="pen-age" onchange="calcPension()">
-              <option value="59">৬৫ বছরের নিচে (চিকিৎসা ৳ ১,৫০০)</option>
-              <option value="65">৬৫ বছর বা তদূর্ধ্ব (চিকিৎসা ৳ ২,৫০০)</option>
+              <option value="59">৬৫ বছরের নিচে (চিকিৎসা ৳ ৩,০০০)</option>
+              <option value="65">৬৫-৬৯ বছর (চিকিৎসা ৳ ৪,০০০)</option>
+              <option value="70">৭০+ বছর (চিকিৎসা ৳ ৬,০০০)</option>
             </select>
           </div>
           <div><label>জন্ম তারিখ (PRL হিসাব)</label><input type="date" id="pen-dob" value="1972-07-15" onchange="calcPension()" /></div>
@@ -333,14 +361,15 @@
         <div class="grid-2">
           <div><label>শুরুর তারিখ</label><input type="date" id="arr-start" value="2026-07-01" onchange="calcArrear()" /></div>
           <div><label>শেষ তারিখ</label><input type="date" id="arr-end" value="2026-10-31" onchange="calcArrear()" /></div>
-          <div><label>উত্তোলিত মূল বেতন (Drawn)</label><input type="number" id="arr-drawn" value="22000" oninput="calcArrear()" /></div>
-          <div><label>প্রাপ্য মূল বেতন (Due)</label><input type="number" id="arr-due" value="24260" oninput="calcArrear()" /></div>
+          <div><label>উত্তোলিত মূল বেতন (২০১৫)</label><input type="number" id="arr-drawn" value="22000" oninput="calcArrear()" /></div>
+          <div><label>প্রাপ্য মূল বেতন (২০২৬ ফেজ-১)</label><input type="number" id="arr-due" value="30800" oninput="calcArrear()" /></div>
           <div>
             <label>বাড়ি ভাড়া এলাকা</label>
             <select id="arr-tier" onchange="calcArrear()">
-              <option value="OTHER">অন্যান্য জেলা ও উপজেলা</option>
-              <option value="CITY">বিভাগীয় শহর</option>
-              <option value="DHAKA">ঢাকা মেট্রো</option>
+              <option value="NONE" selected>শুধু মূল বেতনের পার্থক্য (অন্তর্বর্তী নিয়ম)</option>
+              <option value="OTHER">অন্যান্য জেলা ও উপজেলা (HRA সহ)</option>
+              <option value="CITY">বিভাগীয় শহর (HRA সহ)</option>
+              <option value="DHAKA">ঢাকা মেট্রো (HRA সহ)</option>
             </select>
           </div>
           <div><label>জিপিএফ কর্তন (%)</label><input type="number" id="arr-gpf-pct" value="10" oninput="calcArrear()" /></div>
@@ -377,30 +406,114 @@
       <div class="card">
         <div class="letter-preview" id="letter-box"></div>
         <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap" class="no-print">
-          <button class="btn btn-primary" onclick="copyLetter()">আবেদনপত্র কপি করুন</button>
-          <button class="btn btn-outline" onclick="window.print()">প্রিন্ট / সেভ PDF</button>
+          <button class="btn btn-primary" onclick="window.print()">প্রিন্ট / সেভ PDF</button>
+          <button class="btn btn-outline" onclick="copyLetter()">ইউনিকোড কপি</button>
+          <button class="btn btn-outline" onclick="copySutonny('letter-box')">SutonnyMJ (Bijoy) কপি</button>
         </div>
+      </div>
+    </section>
+
+    <!-- PAY SCALE 2026 REFERENCE TAB -->
+    <section id="tab-scale" class="hidden">
+      <div class="card">
+        <h3 style="margin-top:0">জাতীয় বেতন স্কেল ২০২৬ (S.R.O. 347-Law/2026) চার্ট</h3>
+        <table>
+          <thead><tr><th>গ্রেড</th><th>২০১৫ স্কেল</th><th>২০২৬ পূর্ণ স্কেল</th><th>ফেজ-১ (জুলাই ২০২৬)</th><th>ফেজ-২ (জানু ২০২৭)</th></tr></thead>
+          <tbody id="scale-table"></tbody>
+        </table>
       </div>
     </section>
   </main>
 
   <script>
+    // [grade, min2015, max2015, min2026, max2026, incRate]
     const grades = [
-      [1,78000],[2,66000],[3,56500],[4,50000],[5,43000],
-      [6,35500],[7,29000],[8,23000],[9,22000],[10,16000],
-      [11,12500],[12,11300],[13,11000],[14,10200],[15,9700],
-      [16,9300],[17,9000],[18,8800],[19,8500],[20,8250]
+      [1,78000,78000,156000,156000,0],
+      [2,66000,76490,132000,153000,0.0375],
+      [3,56500,74400,113000,148800,0.04],
+      [4,50000,71200,100000,142400,0.04],
+      [5,43000,69850,86000,139700,0.045],
+      [6,35500,67010,71000,134000,0.045],
+      [7,29000,63410,58000,126800,0.05],
+      [8,23000,55470,46000,111000,0.05],
+      [9,22000,53060,44000,106200,0.05],
+      [10,16000,38640,32000,77300,0.05],
+      [11,12500,30230,25000,60500,0.05],
+      [12,11300,27300,24500,59200,0.05],
+      [13,11000,26590,24000,58000,0.05],
+      [14,10200,24680,23500,56800,0.05],
+      [15,9700,23490,22800,55200,0.05],
+      [16,9300,22490,21900,52900,0.05],
+      [17,9000,21800,21400,51900,0.05],
+      [18,8800,21310,21000,50900,0.05],
+      [19,8500,20570,20500,49600,0.05],
+      [20,8250,20010,20000,48400,0.05]
     ];
     let isBn = true;
 
+    function buildSteps(start, max, rate) {
+      const arr = [start];
+      if (rate <= 0) return arr;
+      let cur = start;
+      for (let i = 0; i < 19; i++) {
+        const next = Math.min(max, Math.ceil((cur * (1 + rate)) / 10) * 10);
+        if (next <= cur) break;
+        arr.push(next);
+        cur = next;
+        if (cur >= max) break;
+      }
+      return arr;
+    }
+
+    function getPhasedBasic(g, stepIdx, phase) {
+      const row = grades.find(x => x[0] === g);
+      const oldSteps = buildSteps(row[1], row[2], row[5]);
+      const newSteps = buildSteps(row[3], row[4], row[5]);
+      const oldB = oldSteps[Math.min(stepIdx, oldSteps.length - 1)];
+      const newB = newSteps[Math.min(stepIdx, newSteps.length - 1)];
+      const diff = Math.max(0, newB - oldB);
+      if (phase === 'OLD2015') return oldB;
+      if (phase === 'FULL2026') return newB;
+      if (phase === 'PHASE1') return oldB + Math.round(diff * (g <= 9 ? 0.40 : 0.50));
+      if (phase === 'PHASE2') return oldB + Math.round(diff * (g <= 9 ? 0.70 : 0.75));
+      return newB;
+    }
+
     const gradeSel = document.getElementById('pb-grade');
-    grades.forEach(([g, min]) => {
+    const stepSel = document.getElementById('pb-step');
+    grades.forEach(([g, oMin, , nMin]) => {
       const opt = document.createElement('option');
       opt.value = g;
-      opt.textContent = `Grade ${g} (Min ৳ ${min.toLocaleString()})`;
+      opt.textContent = `গ্রেড ${g} (২০২৬: ৳${nMin.toLocaleString()} | ২০১৫: ৳${oMin.toLocaleString()})`;
       if (g === 9) opt.selected = true;
       gradeSel.appendChild(opt);
     });
+
+    function populateSteps() {
+      const g = parseInt(gradeSel.value);
+      const row = grades.find(x => x[0] === g);
+      const steps = buildSteps(row[3], row[4], row[5]);
+      stepSel.innerHTML = '';
+      steps.forEach((s, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `ধাপ ${i + 1} (২০২৬ পূর্ণ: ৳${s.toLocaleString()})`;
+        stepSel.appendChild(opt);
+      });
+    }
+
+    function onGradeChange() {
+      populateSteps();
+      syncBasicFromStep();
+    }
+
+    function syncBasicFromStep() {
+      const g = parseInt(gradeSel.value);
+      const stepIdx = parseInt(stepSel.value) || 0;
+      const phase = document.getElementById('pb-phase').value;
+      document.getElementById('pb-basic').value = getPhasedBasic(g, stepIdx, phase);
+      calcPayBill();
+    }
 
     function fmt(n) { return '৳ ' + Math.round(n).toLocaleString('en-IN'); }
 
@@ -428,18 +541,14 @@
       return tier === 'DHAKA' ? Math.max(Math.round(basic*0.50),19500) : tier === 'CITY' ? Math.max(Math.round(basic*0.40),16000) : Math.max(Math.round(basic*0.35),14200);
     }
 
-    function onGradeChange() {
-      const g = parseInt(gradeSel.value);
-      const found = grades.find(x => x[0] === g);
-      if (found) document.getElementById('pb-basic').value = found[1];
-      calcPayBill();
-    }
-
     function calcPayBill() {
       const g = parseInt(gradeSel.value);
+      const stepIdx = parseInt(stepSel.value) || 0;
+      const phase = document.getElementById('pb-phase').value;
       const basic = parseFloat(document.getElementById('pb-basic').value) || 0;
       const tier = document.getElementById('pb-tier').value;
       const type = document.getElementById('pb-type').value;
+      const ageMode = document.getElementById('pb-age').value;
       const gpfPct = parseFloat(document.getElementById('pb-gpf').value) || 0;
       const child = parseInt(document.getElementById('pb-child').value) || 0;
       const loan = parseFloat(document.getElementById('pb-loan').value) || 0;
@@ -455,13 +564,13 @@
         gross = Math.round(basic);
         rows.push([type === 'EID' ? 'উৎসব ভাতা (১০০% মূল বেতন)' : 'শ্রান্তি ও বিনোদন ভাতা', fmt(gross), '']);
       } else {
-        const hra = calcHra(basic, tier);
-        const med = 1500;
+        const hraBase = (phase === 'PHASE1' || phase === 'PHASE2') ? getPhasedBasic(g, stepIdx, 'OLD2015') : basic;
+        const hra = calcHra(hraBase, tier);
+        const med = phase === 'OLD2015' ? 1500 : (ageMode === 'AGE50PLUS' ? 4000 : 3000);
         const edu = child * 500;
         const tiffin = g >= 11 ? 200 : 0;
         const wash = g >= 17 ? 100 : 0;
-        const special = Math.max(Math.round(basic * 0.05), g >= 10 ? 1500 : 1000);
-        gross = basic + hra + med + edu + tiffin + wash + special;
+        gross = basic + hra + med + edu + tiffin + wash;
 
         const gpf = Math.round(basic * (gpfPct / 100));
         const ben = Math.min(Math.round(basic * 0.01), 150);
@@ -470,11 +579,10 @@
 
         rows.push(['মূল বেতন (Basic Pay)', fmt(basic), '']);
         rows.push(['বাড়ি ভাড়া ভাতা (HRA)', fmt(hra), '']);
-        rows.push(['চিকিৎসা ভাতা', fmt(med), '']);
+        rows.push(['চিকিৎসা ভাতা (২০২৬)', fmt(med), '']);
         if (edu > 0) rows.push(['শিক্ষা সহায়ক ভাতা', fmt(edu), '']);
         if (tiffin > 0) rows.push(['টিফিন ভাতা', fmt(tiffin), '']);
         if (wash > 0) rows.push(['ধোলাই ভাতা', fmt(wash), '']);
-        rows.push(['বিশেষ সুবিধা (৫%)', fmt(special), '']);
         rows.push(['মোট প্রাপ্য (Gross)', fmt(gross), 'kv-total']);
         rows.push(['জিপিএফ চাঁদা (' + gpfPct + '%)', '-' + fmt(gpf), 'kv-ded']);
         if (loan > 0) rows.push(['জিপিএফ ঋণ কিস্তি', '-' + fmt(loan), 'kv-ded']);
@@ -524,7 +632,7 @@
       const gross = Math.round(basic * (pct / 100));
       const half = Math.round(gross * 0.5);
       const gratuity = half * rate;
-      const med = age >= 65 ? 2500 : 1500;
+      const med = age >= 70 ? 6000 : age >= 65 ? 4000 : 3000;
       const monthly = (gross - half) + med;
 
       let prlStr = '—';
@@ -541,7 +649,7 @@
         <div class="kv-row"><span>মোট পেনশন (${pct}%)</span><span class="kv-val">${fmt(gross)}</span></div>
         <div class="kv-row"><span>বাধ্যতামূলক সমর্পণ (৫০%)</span><span class="kv-val">${fmt(half)}</span></div>
         <div class="kv-row"><span>আনুতোষিকের হার</span><span class="kv-val">৳ ${rate} / টাকা</span></div>
-        <div class="kv-row"><span>চিকিৎসা ভাতা</span><span class="kv-val">${fmt(med)}</span></div>
+        <div class="kv-row"><span>চিকিৎসা ভাতা (২০২৬)</span><span class="kv-val">${fmt(med)}</span></div>
         <div class="kv-row"><span>মাসিক নিট পেনশন</span><span class="kv-val kv-total">${fmt(monthly)}</span></div>
         <div class="kv-row"><span>এককালীন আনুতোষিক</span><span class="kv-val kv-total">${fmt(gratuity)}</span></div>
         <div class="kv-row"><span>সম্ভাব্য পিআরএল (PRL) শুরু</span><span class="kv-val">${prlStr}</span></div>
@@ -557,8 +665,8 @@
       const gpfPct = parseFloat(document.getElementById('arr-gpf-pct').value) || 0;
 
       if (isNaN(s) || isNaN(e) || e < s) return;
-      const drawnHra = calcHra(drawnB, tier);
-      const dueHra = calcHra(dueB, tier);
+      const drawnHra = tier === 'NONE' ? 0 : calcHra(drawnB, tier);
+      const dueHra = tier === 'NONE' ? 0 : calcHra(dueB, tier);
       let months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth()) + 1;
       const totalDrawn = (drawnB + drawnHra) * months;
       const totalDue = (dueB + dueHra) * months;
@@ -630,16 +738,58 @@ ${desig}
 ${office}`;
     }
 
+    function toBijoy(unicode) {
+      const v = {'অ':'A','আ':'Av','ই':'B','ঈ':'C','উ':'D','ঊ':'E','ঋ':'F','এ':'G','ঐ':'H','ও':'I','ঔ':'J'};
+      const c = {'ক':'K','খ':'L','গ':'M','ঘ':'N','ঙ':'O','চ':'P','ছ':'Q','জ':'R','ঝ':'S','ঞ':'T','ট':'U','ঠ':'V','ড':'W','ঢ':'X','ণ':'Y','ত':'Z','থ':'_','দ':'`','ধ':'a','ন':'b','প':'c','ফ':'d','ব':'e','ভ':'f','ম':'g','য':'h','র':'i','ল':'j','শ':'k','ষ':'l','স':'m','হ':'n','ড়':'o','ঢ়':'p','য়':'q','ৎ':'r','ং':'s','ঃ':'t','ঁ':'u'};
+      const d = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9','।':'|'};
+      const post = {'া':'v','ী':'x','ু':'z','ূ':'~','ৃ':'„','ৗ':'Š','্':'&'};
+      const pre = {'ি':'w','ে':'†','ৈ':'‰'};
+      const jukto = {'ক্ষ':'¶','ক্ত':'³','ক্র':'µ','গু':'¸','গ্র':'MÖ','ঙ্গ':'½','চ্ছ':'”Q','জ্জ':'¾','জ্ঞ':'Á','ঞ্জ':'Ä','ত্ত':'Ë','ত্র':'Î','দ্ব':'Ø','দ্ধ':'×','দ্র':'`ª','ন্ত':'š—','ন্দ':'›`','ন্ধ':'Ü','ন্ন':'bœ','প্ত':'ß','প্র':'cÖ','ব্দ':'ã','ব্র':'eª','ম্প':'¤ú','ম্ব':'¤^','ম্ভ':'¤¢','ম্ম':'¤§','ল্ল':'jø','শ্র':'kÖ','ষ্ট':'ó','ষ্ঠ':'ô','স্ক':'¯‹','স্ত':'¯—','স্থ':'¯’','স্প':'¯ú','স্ব':'¯^','স্ম':'¯§','হ্ম':'þ'};
+      let t = unicode.replace(/[\u200C\u200D]/g,'').replace(/ো/g,'ো').replace(/ৌ/g,'ৌ');
+      let out = '', i = 0;
+      while (i < t.length) {
+        if (i+3 <= t.length && jukto[t.slice(i,i+3)]) {
+          const m = jukto[t.slice(i,i+3)];
+          if (i+3 < t.length && pre[t[i+3]]) { out += pre[t[i+3]] + m; i += 4; continue; }
+          out += m; i += 3; continue;
+        }
+        const ch = t[i];
+        if (i+1 < t.length && pre[t[i+1]] && c[ch]) { out += pre[t[i+1]] + c[ch]; i += 2; continue; }
+        if (i+2 < t.length && ch === 'র' && t[i+1] === '্') {
+          const mc = c[t[i+2]] || t[i+2];
+          if (i+3 < t.length && pre[t[i+3]]) { out += pre[t[i+3]] + mc + '©'; i += 4; continue; }
+          out += mc + '©'; i += 3; continue;
+        }
+        if (i+1 < t.length && ch === '্' && (t[i+1] === 'য' || t[i+1] === 'র' || t[i+1] === 'ব')) {
+          out += t[i+1] === 'য' ? '¨' : t[i+1] === 'র' ? 'ª' : '¡'; i += 2; continue;
+        }
+        out += v[ch] || c[ch] || post[ch] || d[ch] || ch;
+        i++;
+      }
+      return out;
+    }
+
     function copyLetter() {
       navigator.clipboard.writeText(document.getElementById('letter-box').textContent);
-      alert('আবেদনপত্র কপি হয়েছে!');
+      alert('আবেদনপত্র ইউনিকোডে কপি হয়েছে!');
     }
     function copyText(id) {
       navigator.clipboard.writeText(document.getElementById(id).innerText);
-      alert('কপি হয়েছে!');
+      alert('ইউনিকোডে কপি হয়েছে!');
+    }
+    function copySutonny(id) {
+      const txt = id === 'letter-box' ? document.getElementById(id).textContent : document.getElementById(id).innerText;
+      navigator.clipboard.writeText(toBijoy(txt));
+      alert('SutonnyMJ (Bijoy) ফরম্যাটে কপি হয়েছে! MS Word-এ পেস্ট করে SutonnyMJ ফন্ট নির্বাচন করুন।');
     }
 
-    calcPayBill(); calcGpf(); calcPension(); calcArrear(); renderLetter();
+    document.getElementById('scale-table').innerHTML = grades.map(r => {
+      const p1 = getPhasedBasic(r[0], 0, 'PHASE1');
+      const p2 = getPhasedBasic(r[0], 0, 'PHASE2');
+      return `<tr><td><b>গ্রেড ${r[0]}</b></td><td>৳${r[1].toLocaleString()}-${r[2].toLocaleString()}</td><td>৳${r[3].toLocaleString()}-${r[4].toLocaleString()}</td><td>৳${p1.toLocaleString()}</td><td>৳${p2.toLocaleString()}</td></tr>`;
+    }).join('');
+
+    populateSteps(); syncBasicFromStep(); calcGpf(); calcPension(); calcArrear(); renderLetter();
   </script>
 </body>
 </html>

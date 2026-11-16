@@ -20,6 +20,8 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
+import com.example.R
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -46,6 +48,12 @@ object DocumentExporter {
         clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
     }
 
+    fun copySutonnyMjToClipboard(context: Context, label: String, unicodeText: String) {
+        val bijoyText = BijoyConverter.toSutonnyMJ(unicodeText)
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(ClipData.newPlainText("$label (SutonnyMJ)", bijoyText))
+    }
+
     fun sharePlainText(context: Context, subject: String, text: String) {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -53,6 +61,11 @@ object DocumentExporter {
             putExtra(Intent.EXTRA_TEXT, text)
         }
         context.startActivity(Intent.createChooser(intent, subject))
+    }
+
+    private fun loadOfficialFont(context: Context): Typeface {
+        return ResourcesCompat.getFont(context, R.font.noto_serif_bengali)
+            ?: Typeface.SERIF
     }
 
     fun createPdfFile(
@@ -66,31 +79,35 @@ object DocumentExporter {
         val sanitized = fileName.replace(Regex("[^a-zA-Z0-9_-]"), "_")
         val file = File(pdfDir, "$sanitized.pdf")
 
+        val officialFont = loadOfficialFont(context)
+        val officialBold = Typeface.create(officialFont, Typeface.BOLD)
+
         val document = PdfDocument()
         // A4 in points (72 dpi): 595 x 842
         val pageWidth = 595
         val pageHeight = 842
-        val margin = 48
+        val margin = 52
 
         val headerPaint = Paint().apply {
-            color = Color.rgb(11, 87, 61) // Emerald #0B573D
-            textSize = 16f
-            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            color = Color.rgb(11, 87, 61)
+            textSize = 15f
+            typeface = officialBold
             isAntiAlias = true
         }
         val subPaint = Paint().apply {
-            color = Color.rgb(80, 92, 86)
+            color = Color.rgb(74, 92, 84)
             textSize = 10.5f
+            typeface = officialFont
             isAntiAlias = true
         }
         val linePaint = Paint().apply {
             color = Color.rgb(11, 87, 61)
-            strokeWidth = 1.5f
+            strokeWidth = 1.4f
         }
         val bodyPaint = TextPaint().apply {
             color = Color.rgb(22, 29, 25)
             textSize = 11.5f
-            typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+            typeface = officialFont
             isAntiAlias = true
         }
 
@@ -106,13 +123,13 @@ object DocumentExporter {
             yPos += 12f
         }
         canvas.drawLine(margin.toFloat(), yPos, (pageWidth - margin).toFloat(), yPos, linePaint)
-        yPos += 20f
+        yPos += 22f
 
         val contentWidth = pageWidth - (margin * 2)
         val staticLayout = StaticLayout.Builder
             .obtain(bodyText, 0, bodyText.length, bodyPaint, contentWidth)
             .setAlignment(Layout.Alignment.ALIGN_NORMAL)
-            .setLineSpacing(4f, 1.15f)
+            .setLineSpacing(5f, 1.25f)
             .build()
 
         canvas.save()

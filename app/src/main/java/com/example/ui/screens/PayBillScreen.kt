@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
@@ -46,6 +45,7 @@ import com.example.domain.PayBillCalculator
 import com.example.domain.PayBillInput
 import com.example.domain.PayBillResult
 import com.example.domain.PayScale2015
+import com.example.domain.PayScalePhase
 import com.example.ui.components.ExportActionRow
 import com.example.ui.components.KeyValueRow
 import com.example.ui.components.NumberInputField
@@ -84,10 +84,9 @@ fun PayBillScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Summary Gradient Card
         item {
             SummaryGradientCard(
-                title = if (isBengali) "নিট প্রাপ্য বেতন (${selectedMonth})" else "Net Payable (${selectedMonth})",
+                title = if (isBengali) "নিট প্রাপ্য বেতন (${selectedMonth} • ${input.phase.shortBn})" else "Net Payable (${selectedMonth} • ${input.phase.shortEn})",
                 primaryValue = FormatUtils.taka(result.netPayable),
                 subtitle = PayBillCalculator.amountInWordsEn(result.netPayable.toLong()),
                 secondaryLeftLabel = if (isBengali) "মোট বেতন ও ভাতা (Gross)" else "Gross Pay",
@@ -97,13 +96,41 @@ fun PayBillScreen(
             )
         }
 
-        // Configuration Card
         item {
             SectionCard(
-                title = if (isBengali) "বিলের তথ্য ও গ্রেড নির্বাচন" else "Bill Parameters & Pay Grade",
+                title = if (isBengali) "পে-স্কেল ২০২৬ ধাপ ও বিল সেটআপ" else "Pay Scale 2026 Phase & Bill Setup",
                 icon = Icons.Outlined.Tune
             ) {
-                // Bill Type Filter Chips
+                Text(
+                    text = if (isBengali) "পে-স্কেল ২০২৬ বাস্তবায়ন পর্যায় (স্বয়ংক্রিয় হিসাব)" else "Pay Scale 2026 Implementation Phase",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(6.dp))
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    PayScalePhase.entries.forEach { phase ->
+                        FilterChip(
+                            selected = input.phase == phase,
+                            onClick = {
+                                val autoBasic = PayScale2015.getPayableBasicForStep(input.grade, input.stepIndex, phase)
+                                onInputChange(
+                                    input.copy(
+                                        phase = phase,
+                                        basicPay = autoBasic,
+                                        includeSpecialBenefit = phase == PayScalePhase.OLD_2015
+                                    )
+                                )
+                            },
+                            label = { Text(if (isBengali) phase.shortBn else phase.shortEn) },
+                            modifier = Modifier.testTag("pay_phase_${phase.name}")
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(10.dp))
                 Text(
                     text = if (isBengali) "বিলের ধরন" else "Bill Type",
                     style = MaterialTheme.typography.labelMedium,
@@ -125,8 +152,6 @@ fun PayBillScreen(
                 }
 
                 Spacer(Modifier.height(12.dp))
-
-                // Month Dropdown
                 ExposedDropdownMenuBox(
                     expanded = monthMenuExpanded,
                     onExpandedChange = { monthMenuExpanded = it }
@@ -158,8 +183,6 @@ fun PayBillScreen(
                 }
 
                 Spacer(Modifier.height(10.dp))
-
-                // Grade & Basic Pay Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -185,9 +208,10 @@ fun PayBillScreen(
                         ) {
                             PayScale2015.grades.forEach { g ->
                                 DropdownMenuItem(
-                                    text = { Text("Grade ${g.grade} (${g.minBasic} - ${g.maxBasic})") },
+                                    text = { Text("Grade ${g.grade} (২০২৬: ${FormatUtils.numberFormatted(g.minBasic2026)})") },
                                     onClick = {
-                                        onInputChange(input.copy(grade = g.grade, basicPay = g.minBasic))
+                                        val autoBasic = PayScale2015.getPayableBasicForStep(g.grade, 0, input.phase)
+                                        onInputChange(input.copy(grade = g.grade, stepIndex = 0, basicPay = autoBasic))
                                         gradeMenuExpanded = false
                                     }
                                 )
@@ -201,10 +225,10 @@ fun PayBillScreen(
                         modifier = Modifier.weight(1f)
                     ) {
                         OutlinedTextField(
-                            value = FormatUtils.numberFormatted(input.basicPay),
+                            value = "${if (isBengali) "ধাপ" else "Step"} ${input.stepIndex + 1} (${FormatUtils.numberFormatted(input.basicPay)})",
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text(if (isBengali) "মূল বেতন ধাপ" else "Basic Step") },
+                            label = { Text(if (isBengali) "বেতন ধাপ" else "Pay Step") },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = stepMenuExpanded) },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -214,11 +238,12 @@ fun PayBillScreen(
                             expanded = stepMenuExpanded,
                             onDismissRequest = { stepMenuExpanded = false }
                         ) {
-                            currentGrade.steps.forEachIndexed { idx, step ->
+                            currentGrade.steps2026.forEachIndexed { idx, step2026 ->
+                                val payable = PayScale2015.getPayableBasicForStep(input.grade, idx, input.phase)
                                 DropdownMenuItem(
-                                    text = { Text("Step ${idx + 1}: ৳ ${FormatUtils.numberFormatted(step)}") },
+                                    text = { Text("ধাপ ${idx + 1}: ৳ ${FormatUtils.numberFormatted(payable)} (পূর্ণ: ${FormatUtils.numberFormatted(step2026)})") },
                                     onClick = {
-                                        onInputChange(input.copy(basicPay = step))
+                                        onInputChange(input.copy(stepIndex = idx, basicPay = payable))
                                         stepMenuExpanded = false
                                     }
                                 )
@@ -228,15 +253,12 @@ fun PayBillScreen(
                 }
 
                 Spacer(Modifier.height(10.dp))
-
-                // Custom Basic Override
                 NumberInputField(
                     value = input.basicPay.toString(),
                     onValueChange = { txt ->
-                        val v = txt.toIntOrNull() ?: 0
-                        onInputChange(input.copy(basicPay = v))
+                        onInputChange(input.copy(basicPay = txt.toIntOrNull() ?: 0))
                     },
-                    label = if (isBengali) "মূল বেতন (ম্যানুয়াল পরিবর্তনযোগ্য)" else "Basic Pay (Editable)",
+                    label = if (isBengali) "প্রাপ্য মূল বেতন (স্বয়ংক্রিয়/সম্পাদনযোগ্য)" else "Payable Basic Pay",
                     testTag = "paybill_basic_input"
                 )
 
@@ -311,14 +333,13 @@ fun PayBillScreen(
                     }
 
                     Spacer(Modifier.height(10.dp))
-                    // Children Education Count
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (isBengali) "শিক্ষা সহায়ক ভাতা (সন্তান সংখ্যা)" else "Education Allowance (Children)",
+                            text = if (isBengali) "শিক্ষা সহায়ক ভাতা (সন্তান)" else "Education Allowance",
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.weight(1f)
                         )
@@ -339,12 +360,12 @@ fun PayBillScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (isBengali) "বিশেষ সুবিধা (৫%)" else "Special Benefit (5%)",
+                            text = if (isBengali) "বয়স ৫০+ (চিকিৎসা ৳৪,০০০)" else "Age 50+ (Medical ৳4,000)",
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Switch(
-                            checked = input.includeSpecialBenefit,
-                            onCheckedChange = { onInputChange(input.copy(includeSpecialBenefit = it)) }
+                            checked = input.isAge50Plus,
+                            onCheckedChange = { onInputChange(input.copy(isAge50Plus = it)) }
                         )
                     }
 
@@ -366,7 +387,6 @@ fun PayBillScreen(
             }
         }
 
-        // Earnings Breakdown
         item {
             SectionCard(
                 title = if (isBengali) "বেতন ও ভাতাদি (Earnings)" else "Salary & Allowances",
@@ -377,7 +397,7 @@ fun PayBillScreen(
                     KeyValueRow(if (isBengali) "বাড়ি ভাড়া ভাতা" else "House Rent Allowance", FormatUtils.taka(result.houseRentAllowance))
                 }
                 if (result.medicalAllowance > 0) {
-                    KeyValueRow(if (isBengali) "চিকিৎসা ভাতা" else "Medical Allowance", FormatUtils.taka(result.medicalAllowance))
+                    KeyValueRow(if (isBengali) "চিকিৎসা ভাতা (২০২৬)" else "Medical Allowance (2026)", FormatUtils.taka(result.medicalAllowance))
                 }
                 if (result.educationAllowance > 0) {
                     KeyValueRow(if (isBengali) "শিক্ষা সহায়ক ভাতা" else "Education Allowance", FormatUtils.taka(result.educationAllowance))
@@ -389,7 +409,7 @@ fun PayBillScreen(
                     KeyValueRow(if (isBengali) "ধোলাই ভাতা" else "Washing Allowance", FormatUtils.taka(result.washingAllowance))
                 }
                 if (result.specialBenefit > 0) {
-                    KeyValueRow(if (isBengali) "বিশেষ সুবিধা (৫%)" else "Special Benefit (5%)", FormatUtils.taka(result.specialBenefit))
+                    KeyValueRow(if (isBengali) "বিশেষ সুবিধা" else "Special Benefit", FormatUtils.taka(result.specialBenefit))
                 }
                 if (result.chargeAllowance > 0) {
                     KeyValueRow(if (isBengali) "অতিরিক্ত দায়িত্ব/অন্যান্য" else "Charge/Other Allowance", FormatUtils.taka(result.chargeAllowance))
@@ -403,7 +423,6 @@ fun PayBillScreen(
             }
         }
 
-        // Deductions Breakdown
         if (result.totalDeduction > 0) {
             item {
                 SectionCard(
@@ -443,10 +462,9 @@ fun PayBillScreen(
             }
         }
 
-        // Export Actions
         item {
             SectionCard(
-                title = if (isBengali) "বেতন বিল কপি ডাউনলোড ও শেয়ার" else "Export & Save Pay Bill Copy",
+                title = if (isBengali) "বেতন বিল কপি প্রিন্ট, SutonnyMJ কপি ও PDF" else "Print, SutonnyMJ Copy & PDF",
                 icon = Icons.Outlined.ReceiptLong
             ) {
                 ExportActionRow(
@@ -455,16 +473,24 @@ fun PayBillScreen(
                         DocumentExporter.copyToClipboard(context, "Pay Bill Copy", buildSummaryText())
                         Toast.makeText(
                             context,
-                            if (isBengali) "বেতন বিল কপি ক্লিপবোর্ডে কপি হয়েছে" else "Pay Bill copied to clipboard",
+                            if (isBengali) "বেতন বিল কপি ক্লিপবোর্ডে কপি হয়েছে" else "Pay Bill copied",
                             Toast.LENGTH_SHORT
+                        ).show()
+                    },
+                    onCopySutonnyMj = {
+                        DocumentExporter.copySutonnyMjToClipboard(context, "Pay Bill Copy", buildSummaryText())
+                        Toast.makeText(
+                            context,
+                            "SutonnyMJ (Bijoy) ফরম্যাটে কপি হয়েছে! MS Word-এ পেস্ট করে SutonnyMJ ফন্ট দিন।",
+                            Toast.LENGTH_LONG
                         ).show()
                     },
                     onSharePdf = {
                         DocumentExporter.sharePdf(
                             context = context,
                             fileName = "PayBill_${selectedMonth}",
-                            headerTitle = "iBAS Sahayak - Manual Pay Bill Copy",
-                            subHeader = "Month: $selectedMonth | Grade ${input.grade}",
+                            headerTitle = "iBAS Sahayak - Pay Bill Copy (Pay Scale 2026)",
+                            subHeader = "Month: $selectedMonth | Grade ${input.grade} | ${input.phase.shortEn}",
                             bodyText = buildSummaryText()
                         )
                     },
@@ -472,7 +498,7 @@ fun PayBillScreen(
                         DocumentExporter.printPdf(
                             context = context,
                             jobName = "PayBill_${selectedMonth}",
-                            headerTitle = "iBAS Sahayak - Manual Pay Bill Copy",
+                            headerTitle = "iBAS Sahayak - Pay Bill Copy (Pay Scale 2026)",
                             subHeader = "Month: $selectedMonth | Grade ${input.grade}",
                             bodyText = buildSummaryText()
                         )

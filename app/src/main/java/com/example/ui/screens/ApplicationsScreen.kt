@@ -272,8 +272,8 @@ fun ApplicationsScreen(
                         Text(
                             text = generatedLetter,
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = 13.5.sp,
-                                lineHeight = 20.sp,
+                                fontSize = 14.sp,
+                                lineHeight = 22.sp,
                                 color = Color(0xFF1A1F1C)
                             )
                         )
@@ -288,6 +288,14 @@ fun ApplicationsScreen(
                             context,
                             if (isBengali) "আবেদনপত্র কপি করা হয়েছে" else "Application copied to clipboard",
                             Toast.LENGTH_SHORT
+                        ).show()
+                    },
+                    onCopySutonnyMj = {
+                        DocumentExporter.copySutonnyMjToClipboard(context, form.type.titleEn, generatedLetter)
+                        Toast.makeText(
+                            context,
+                            "SutonnyMJ (Bijoy) ফরম্যাটে কপি হয়েছে! MS Word-এ পেস্ট করে SutonnyMJ ফন্ট দিন।",
+                            Toast.LENGTH_LONG
                         ).show()
                     },
                     onSharePdf = {

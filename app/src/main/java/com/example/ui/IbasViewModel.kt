@@ -93,9 +93,14 @@ class IbasViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun syncCalculatorsWithProfile(p: EmployeeProfile) {
+        val gradeData = PayScale2015.getGrade(p.grade)
+        val oldBasic = gradeData.steps.getOrElse(p.stepIndex) { gradeData.minBasic }
+        val new2026Basic = PayScale2015.getPayableBasicForStep(p.grade, p.stepIndex, p.payScalePhase)
         updatePayBillInput(
             _payBillInput.value.copy(
                 grade = p.grade,
+                stepIndex = p.stepIndex,
+                phase = p.payScalePhase,
                 basicPay = p.basicPay,
                 tier = p.houseRentTier,
                 gpfPercent = p.gpfPercent
@@ -109,14 +114,14 @@ class IbasViewModel(application: Application) : AndroidViewModel(application) {
         )
         updatePensionInput(
             _pensionInput.value.copy(
-                lastBasicPay = p.basicPay,
+                lastBasicPay = gradeData.steps2026.getOrElse(p.stepIndex) { gradeData.minBasic2026 },
                 birthDateIso = p.birthDateIso
             )
         )
         updateArrearInput(
             _arrearInput.value.copy(
-                drawnBasic = p.basicPay,
-                dueBasic = PayScale2015.getGrade(p.grade).steps.firstOrNull { it > p.basicPay } ?: (p.basicPay + 1500),
+                drawnBasic = oldBasic,
+                dueBasic = new2026Basic,
                 tier = p.houseRentTier,
                 gpfPercent = p.gpfPercent
             )

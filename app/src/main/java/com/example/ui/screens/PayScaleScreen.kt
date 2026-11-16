@@ -36,8 +36,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.HouseRentTier
 import com.example.domain.PayScale2015
+import com.example.domain.PayScalePhase
 import com.example.ui.components.BadgeChip
 import com.example.ui.theme.MonoFontFamily
 import com.example.util.FormatUtils
@@ -57,15 +57,15 @@ fun PayScaleScreen(
     ) {
         item {
             Text(
-                text = if (isBengali) "জাতীয় বেতন স্কেল ২০১৫ (গ্রেড ১ - ২০)" else "National Pay Scale 2015 (Grade 1–20)",
+                text = if (isBengali) "জাতীয় বেতন স্কেল ২০২৬ (গ্রেড ১ - ২০)" else "National Pay Scale 2026 (Grade 1–20)",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = if (isBengali) {
-                    "ধাপ ও বাড়ি ভাড়া দেখতে যেকোনো গ্রেডে ট্যাপ করুন"
+                    "২০২৬ গেজেট (S.R.O. 347-Law/2026) ও ২০১৫ স্কেলের তুলনামূলক ধাপ দেখতে গ্রেডে ট্যাপ করুন"
                 } else {
-                    "Tap any grade to inspect increment steps and House Rent slabs"
+                    "Tap any grade to compare 2026 Gazette steps, phased payouts, and 2015 scale"
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -75,6 +75,9 @@ fun PayScaleScreen(
 
         items(PayScale2015.grades, key = { it.grade }) { grade ->
             val isExpanded = expandedGrade == grade.grade
+            val p1Min = PayScale2015.getPayableBasicForStep(grade.grade, 0, PayScalePhase.PHASE_1_2026)
+            val p2Min = PayScale2015.getPayableBasicForStep(grade.grade, 0, PayScalePhase.PHASE_2_2027)
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -100,12 +103,20 @@ fun PayScaleScreen(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             BadgeChip(text = "${if (isBengali) "গ্রেড" else "Grade"} ${grade.grade}")
-                            Text(
-                                text = "৳ ${FormatUtils.numberFormatted(grade.minBasic)} - ${FormatUtils.numberFormatted(grade.maxBasic)}",
-                                fontFamily = MonoFontFamily,
-                                fontWeight = FontWeight.SemiBold,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            Column {
+                                Text(
+                                    text = "২০২৬: ৳ ${FormatUtils.numberFormatted(grade.minBasic2026)} - ${FormatUtils.numberFormatted(grade.maxBasic2026)}",
+                                    fontFamily = MonoFontFamily,
+                                    fontWeight = FontWeight.SemiBold,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(
+                                    text = "২০১৫: ৳ ${FormatUtils.numberFormatted(grade.minBasic)} - ${FormatUtils.numberFormatted(grade.maxBasic)}",
+                                    fontFamily = MonoFontFamily,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                         Icon(
                             imageVector = if (isExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
@@ -119,19 +130,25 @@ fun PayScaleScreen(
                             Spacer(Modifier.height(8.dp))
                             Text(
                                 text = if (isBengali) {
-                                    "বার্ষিক ইনক্রিমেন্ট: ${grade.incrementPercent}% • ধাপসমূহ (Steps):"
+                                    "ফেজ-১ (জুলাই–ডিসে. ২০২৬) প্রারম্ভিক: ${FormatUtils.taka(p1Min)}  |  ফেজ-২ (জানু–জুন ২০২৭): ${FormatUtils.taka(p2Min)}"
                                 } else {
-                                    "Annual Increment: ${grade.incrementPercent}% • Pay Steps:"
+                                    "Phase 1 (Jul–Dec 2026) Start: ${FormatUtils.taka(p1Min)}  |  Phase 2 (Jan–Jun 2027): ${FormatUtils.taka(p2Min)}"
                                 },
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.primary
                             )
                             Spacer(Modifier.height(8.dp))
+                            Text(
+                                text = if (isBengali) "২০২৬ পূর্ণ বেতন ধাপসমূহ (${grade.incrementPercent}% ইনক্রিমেন্ট):" else "2026 Full Pay Steps (${grade.incrementPercent}% increment):",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(Modifier.height(6.dp))
                             FlowRow(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                grade.steps.forEachIndexed { idx, step ->
+                                grade.steps2026.forEachIndexed { idx, step ->
                                     Surface(
                                         shape = MaterialTheme.shapes.extraSmall,
                                         color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -146,16 +163,6 @@ fun PayScaleScreen(
                                     }
                                 }
                             }
-                            Spacer(Modifier.height(10.dp))
-                            Text(
-                                text = if (isBengali) {
-                                    "প্রারম্ভিক মূল বেতনে বাড়ি ভাড়া: ঢাকা ${FormatUtils.taka(PayScale2015.calculateHouseRent(grade.minBasic, HouseRentTier.DHAKA_METRO))} | বিভাগীয় ${FormatUtils.taka(PayScale2015.calculateHouseRent(grade.minBasic, HouseRentTier.DIVISIONAL_CITY))} | অন্যান্য ${FormatUtils.taka(PayScale2015.calculateHouseRent(grade.minBasic, HouseRentTier.OTHER_DISTRICT))}"
-                                } else {
-                                    "HRA at Min Basic: Dhaka ${FormatUtils.taka(PayScale2015.calculateHouseRent(grade.minBasic, HouseRentTier.DHAKA_METRO))} | Major City ${FormatUtils.taka(PayScale2015.calculateHouseRent(grade.minBasic, HouseRentTier.DIVISIONAL_CITY))} | Other ${FormatUtils.taka(PayScale2015.calculateHouseRent(grade.minBasic, HouseRentTier.OTHER_DISTRICT))}"
-                                },
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
                         }
                     }
                 }

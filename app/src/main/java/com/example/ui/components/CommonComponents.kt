@@ -272,6 +272,7 @@ fun NumberInputField(
 fun ExportActionRow(
     isBengali: Boolean,
     onCopy: () -> Unit,
+    onCopySutonnyMj: (() -> Unit)? = null,
     onSharePdf: () -> Unit,
     onPrint: () -> Unit,
     onSave: (() -> Unit)? = null,
@@ -288,58 +289,72 @@ fun ExportActionRow(
                     .weight(1f)
                     .minimumInteractiveComponentSize()
                     .testTag("action_copy_button"),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp)
             ) {
                 Icon(Icons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text(if (isBengali) "কপি করুন" else "Copy", maxLines = 1)
+                Text(if (isBengali) "ইউনিকোড কপি" else "Copy Text", maxLines = 1)
             }
-            Button(
-                onClick = onSharePdf,
-                modifier = Modifier
-                    .weight(1f)
-                    .minimumInteractiveComponentSize()
-                    .testTag("action_share_pdf_button"),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
-            ) {
-                Icon(Icons.Outlined.PictureAsPdf, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(if (isBengali) "PDF শেয়ার" else "Share PDF", maxLines = 1)
+            if (onCopySutonnyMj != null) {
+                FilledTonalButton(
+                    onClick = onCopySutonnyMj,
+                    modifier = Modifier
+                        .weight(1f)
+                        .minimumInteractiveComponentSize()
+                        .testTag("action_copy_sutonny_button"),
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp)
+                ) {
+                    Icon(Icons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("SutonnyMJ কপি", maxLines = 1)
+                }
             }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            Button(
+                onClick = onSharePdf,
+                modifier = Modifier
+                    .weight(1f)
+                    .minimumInteractiveComponentSize()
+                    .testTag("action_share_pdf_button"),
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp)
+            ) {
+                Icon(Icons.Outlined.PictureAsPdf, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(if (isBengali) "PDF শেয়ার" else "Share PDF", maxLines = 1)
+            }
             OutlinedButton(
                 onClick = onPrint,
                 modifier = Modifier
                     .weight(1f)
                     .minimumInteractiveComponentSize()
                     .testTag("action_print_button"),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 10.dp)
             ) {
                 Icon(Icons.Outlined.Print, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text(if (isBengali) "প্রিন্ট / সেভ PDF" else "Print / Save PDF", maxLines = 1)
+                Text(if (isBengali) "প্রিন্ট / PDF" else "Print / PDF", maxLines = 1)
             }
-            if (onSave != null) {
-                Button(
-                    onClick = onSave,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .minimumInteractiveComponentSize()
-                        .testTag("action_save_history_button"),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
-                ) {
-                    Icon(Icons.Outlined.BookmarkAdd, contentDescription = null, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(if (isBengali) "সংরক্ষণ করুন" else "Save Copy", maxLines = 1)
-                }
+        }
+        if (onSave != null) {
+            Button(
+                onClick = onSave,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .minimumInteractiveComponentSize()
+                    .testTag("action_save_history_button"),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp)
+            ) {
+                Icon(Icons.Outlined.BookmarkAdd, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(if (isBengali) "হিস্টোরিতে সংরক্ষণ করুন" else "Save to History", maxLines = 1)
             }
         }
     }

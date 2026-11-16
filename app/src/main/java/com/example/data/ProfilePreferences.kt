@@ -10,6 +10,8 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.domain.HouseRentTier
+import com.example.domain.PayScale2015
+import com.example.domain.PayScalePhase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -24,7 +26,9 @@ data class EmployeeProfile(
     val gpfAccountNo: String = "",
     val mobileNo: String = "",
     val grade: Int = 9,
-    val basicPay: Int = 22000,
+    val stepIndex: Int = 0,
+    val payScalePhase: PayScalePhase = PayScalePhase.PHASE_1_2026,
+    val basicPay: Int = PayScale2015.getPayableBasicForStep(9, 0, PayScalePhase.PHASE_1_2026),
     val houseRentTier: HouseRentTier = HouseRentTier.OTHER_DISTRICT,
     val gpfPercent: Int = 10,
     val gpfOpeningBalance: Double = 350000.0,
@@ -43,6 +47,8 @@ class ProfilePreferencesRepository(private val context: Context) {
         val GPF_ACCOUNT_NO = stringPreferencesKey("gpf_account_no")
         val MOBILE_NO = stringPreferencesKey("mobile_no")
         val GRADE = intPreferencesKey("grade")
+        val STEP_INDEX = intPreferencesKey("step_index")
+        val PAY_PHASE = stringPreferencesKey("pay_phase")
         val BASIC_PAY = intPreferencesKey("basic_pay")
         val HRA_TIER = stringPreferencesKey("hra_tier")
         val GPF_PERCENT = intPreferencesKey("gpf_percent")
@@ -56,6 +62,13 @@ class ProfilePreferencesRepository(private val context: Context) {
         val tierName = prefs[Keys.HRA_TIER] ?: HouseRentTier.OTHER_DISTRICT.name
         val tier = runCatching { HouseRentTier.valueOf(tierName) }
             .getOrDefault(HouseRentTier.OTHER_DISTRICT)
+        val phaseName = prefs[Keys.PAY_PHASE] ?: PayScalePhase.PHASE_1_2026.name
+        val phase = runCatching { PayScalePhase.valueOf(phaseName) }
+            .getOrDefault(PayScalePhase.PHASE_1_2026)
+        val grade = prefs[Keys.GRADE] ?: 9
+        val stepIndex = prefs[Keys.STEP_INDEX] ?: 0
+        val defaultBasic = PayScale2015.getPayableBasicForStep(grade, stepIndex, phase)
+
         EmployeeProfile(
             fullName = prefs[Keys.FULL_NAME] ?: "",
             designation = prefs[Keys.DESIGNATION] ?: "",
@@ -64,8 +77,10 @@ class ProfilePreferencesRepository(private val context: Context) {
             ibasId = prefs[Keys.IBAS_ID] ?: "",
             gpfAccountNo = prefs[Keys.GPF_ACCOUNT_NO] ?: "",
             mobileNo = prefs[Keys.MOBILE_NO] ?: "",
-            grade = prefs[Keys.GRADE] ?: 9,
-            basicPay = prefs[Keys.BASIC_PAY] ?: 22000,
+            grade = grade,
+            stepIndex = stepIndex,
+            payScalePhase = phase,
+            basicPay = prefs[Keys.BASIC_PAY] ?: defaultBasic,
             houseRentTier = tier,
             gpfPercent = prefs[Keys.GPF_PERCENT] ?: 10,
             gpfOpeningBalance = prefs[Keys.GPF_BALANCE] ?: 350000.0,
@@ -85,6 +100,8 @@ class ProfilePreferencesRepository(private val context: Context) {
             prefs[Keys.GPF_ACCOUNT_NO] = profile.gpfAccountNo
             prefs[Keys.MOBILE_NO] = profile.mobileNo
             prefs[Keys.GRADE] = profile.grade
+            prefs[Keys.STEP_INDEX] = profile.stepIndex
+            prefs[Keys.PAY_PHASE] = profile.payScalePhase.name
             prefs[Keys.BASIC_PAY] = profile.basicPay
             prefs[Keys.HRA_TIER] = profile.houseRentTier.name
             prefs[Keys.GPF_PERCENT] = profile.gpfPercent

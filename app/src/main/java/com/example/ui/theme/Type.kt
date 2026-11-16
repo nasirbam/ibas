@@ -8,19 +8,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.R
 
-val DisplayFontFamily = FontFamily(
-    Font(R.font.plus_jakarta_sans, FontWeight.Normal),
-    Font(R.font.plus_jakarta_sans, FontWeight.Medium),
-    Font(R.font.plus_jakarta_sans, FontWeight.SemiBold),
-    Font(R.font.plus_jakarta_sans, FontWeight.Bold)
+val OfficialBengaliSerifFamily = FontFamily(
+    Font(R.font.noto_serif_bengali, FontWeight.Normal),
+    Font(R.font.noto_serif_bengali, FontWeight.Medium),
+    Font(R.font.noto_serif_bengali, FontWeight.SemiBold),
+    Font(R.font.noto_serif_bengali, FontWeight.Bold)
 )
 
-val BodyFontFamily = FontFamily(
-    Font(R.font.hind_siliguri, FontWeight.Normal),
-    Font(R.font.hind_siliguri, FontWeight.Medium),
-    Font(R.font.hind_siliguri, FontWeight.SemiBold),
-    Font(R.font.hind_siliguri, FontWeight.Bold)
-)
+val DisplayFontFamily = OfficialBengaliSerifFamily
+val BodyFontFamily = OfficialBengaliSerifFamily
 
 val MonoFontFamily = FontFamily(
     Font(R.font.jetbrains_mono, FontWeight.Normal),
@@ -32,32 +28,32 @@ val AppTypography = Typography(
     displaySmall = TextStyle(
         fontFamily = DisplayFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
-        lineHeight = 40.sp
+        fontSize = 30.sp,
+        lineHeight = 38.sp
     ),
     headlineMedium = TextStyle(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 26.sp,
+        fontSize = 25.sp,
         lineHeight = 34.sp
     ),
     headlineSmall = TextStyle(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
+        fontSize = 21.sp,
         lineHeight = 28.sp
     ),
     titleLarge = TextStyle(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 20.sp,
+        fontSize = 19.sp,
         lineHeight = 26.sp
     ),
     titleMedium = TextStyle(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
-        lineHeight = 22.sp,
+        lineHeight = 23.sp,
         letterSpacing = 0.1.sp
     ),
     titleSmall = TextStyle(
@@ -70,19 +66,19 @@ val AppTypography = Typography(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        lineHeight = 24.sp
+        lineHeight = 25.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        lineHeight = 20.sp
+        lineHeight = 21.sp
     ),
     bodySmall = TextStyle(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
-        lineHeight = 16.sp
+        lineHeight = 17.sp
     ),
     labelLarge = TextStyle(
         fontFamily = BodyFontFamily,
@@ -100,6 +96,6 @@ val AppTypography = Typography(
         fontFamily = BodyFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
-        lineHeight = 14.sp
+        lineHeight = 15.sp
     )
 )

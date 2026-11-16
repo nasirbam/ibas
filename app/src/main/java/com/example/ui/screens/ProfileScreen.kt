@@ -174,6 +174,28 @@ fun ProfileScreen(
                 title = if (isBn) "বেতন গ্রেড ও জিপিএফ ডিফল্ট" else "Pay Grade & GPF Defaults",
                 icon = Icons.Outlined.WorkOutline
             ) {
+                Text(
+                    text = if (isBn) "পে-স্কেল ২০২৬ পর্যায়" else "Pay Scale 2026 Phase",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(6.dp))
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    com.example.domain.PayScalePhase.entries.forEach { phase ->
+                        FilterChip(
+                            selected = draft.payScalePhase == phase,
+                            onClick = {
+                                val autoBasic = PayScale2015.getPayableBasicForStep(draft.grade, draft.stepIndex, phase)
+                                draft = draft.copy(payScalePhase = phase, basicPay = autoBasic)
+                            },
+                            label = { Text(if (isBn) phase.shortBn else phase.shortEn) }
+                        )
+                    }
+                }
+                Spacer(Modifier.height(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -199,9 +221,10 @@ fun ProfileScreen(
                         ) {
                             PayScale2015.grades.forEach { g ->
                                 DropdownMenuItem(
-                                    text = { Text("Grade ${g.grade} (${FormatUtils.numberFormatted(g.minBasic)} - ${FormatUtils.numberFormatted(g.maxBasic)})") },
+                                    text = { Text("Grade ${g.grade} (২০২৬: ${FormatUtils.numberFormatted(g.minBasic2026)})") },
                                     onClick = {
-                                        draft = draft.copy(grade = g.grade, basicPay = g.minBasic)
+                                        val autoBasic = PayScale2015.getPayableBasicForStep(g.grade, 0, draft.payScalePhase)
+                                        draft = draft.copy(grade = g.grade, stepIndex = 0, basicPay = autoBasic)
                                         gradeExpanded = false
                                     }
                                 )
@@ -212,7 +235,7 @@ fun ProfileScreen(
                     NumberInputField(
                         value = draft.basicPay.toString(),
                         onValueChange = { draft = draft.copy(basicPay = it.toIntOrNull() ?: 0) },
-                        label = if (isBn) "মূল বেতন" else "Basic Pay",
+                        label = if (isBn) "মূল বেতন (২০২৬)" else "Basic Pay (2026)",
                         modifier = Modifier.weight(1f)
                     )
                 }
