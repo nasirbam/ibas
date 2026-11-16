@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iBAS Sahayak — সরকারি চাকরিজীবী সহায়ক</title>
+  <style>
+    :root {
+      --primary: #0b573d;
+      --primary-dark: #073d2a;
+      --primary-soft: #d2efe3;
+      --gold: #9a6d16;
+      --gold-soft: #ffdea6;
+      --bg: #f6f7f3;
+      --card: #ffffff;
+      --text: #161d19;
+      --muted: #4a5c54;
+      --border: #d5ded8;
+      --danger: #ba1a1a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Bengali", "Hind Siliguri", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, #195e6a 100%);
+      color: #fff;
+      padding: 20px 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand h1 { margin: 0; font-size: 1.5rem; }
+    .brand p { margin: 4px 0 0; font-size: 0.9rem; opacity: 0.9; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-gold { background: var(--gold-soft); color: #2b1b00; }
+    .btn-outline { background: #fff; color: var(--primary); border: 1px solid var(--border); }
+    .btn-lang { background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px 4px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .summary-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, #1f5d6b 100%);
+      color: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .summary-banner .amount {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      margin: 6px 0;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.25);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .kv-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.95rem;
+    }
+    .kv-row:last-child { border-bottom: none; }
+    .kv-val { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+    .kv-ded { color: var(--danger); }
+    .kv-total { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
+    .letter-preview {
+      background: #fffefa;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+    .hidden { display: none !important; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: left; }
+    th { color: var(--muted); font-weight: 700; }
+    @media print {
+      header, .tabs, .no-print { display: none !important; }
+      body { background: #fff; }
+      .card { border: none; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <h1>iBAS Sahayak (iBAS সহায়ক)</h1>
+        <p id="subtitle">সরকারি চাকরিজীবীদের ম্যানুয়াল বেতন বিল, জিপিএফ, পেনশন, বকেয়া ও ছুটির আবেদন সহায়ক</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-lang" onclick="toggleLang()" id="langBtn">English</button>
+        <a class="btn btn-gold" href="./iBAS-Sahayak.apk" download>⬇ Android APK</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs no-print">
+    <button class="tab-btn active" onclick="showTab('paybill', this)" data-bn="বেতন বিল কপি" data-en="Pay Bill Copy">বেতন বিল কপি</button>
+    <button class="tab-btn" onclick="showTab('gpf', this)" data-bn="জিপিএফ হিসাব" data-en="GPF Calculator">জিপিএফ হিসাব</button>
+    <button class="tab-btn" onclick="showTab('pension', this)" data-bn="পেনশন ও গ্র্যাচুইটি" data-en="Pension & PRL">পেনশন ও গ্র্যাচুইটি</button>
+    <button class="tab-btn" onclick="showTab('arrear', this)" data-bn="বকেয়া বেতন" data-en="Arrear Calculator">বকেয়া বেতন</button>
+    <button class="tab-btn" onclick="showTab('apps', this)" data-bn="ছুটি ও যোগদান আবেদন" data-en="Leave & Joining">ছুটি ও যোগদান আবেদন</button>
+  </nav>
+
+  <main class="container">
+    <!-- PAY BILL TAB -->
+    <section id="tab-paybill">
+      <div class="summary-banner">
+        <div id="pb-net-label">নিট প্রাপ্য বেতন (Net Payable)</div>
+        <div class="amount" id="pb-net">৳ 0</div>
+        <div class="summary-grid">
+          <div><small>মোট বেতন-ভাতা (Gross)</small><div id="pb-gross" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+          <div><small>মোট কর্তন (Deduction)</small><div id="pb-ded" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+        </div>
+      </div>
+
+      <div class="card no-print">
+        <div class="grid-2">
+          <div>
+            <label>গ্রেড (Grade 1-20)</label>
+            <select id="pb-grade" onchange="onGradeChange()"></select>
+          </div>
+          <div>
+            <label>মূল বেতন (Basic Pay)</label>
+            <input type="number" id="pb-basic" value="22000" oninput="calcPayBill()" />
+          </div>
+          <div>
+            <label>কর্মস্থল এলাকা (বাড়ি ভাড়া)</label>
+            <select id="pb-tier" onchange="calcPayBill()">
+              <option value="OTHER">অন্যান্য জেলা ও উপজেলা</option>
+              <option value="CITY">বিভাগীয় শহর / গাজীপুর / নারায়ণগঞ্জ</option>
+              <option value="DHAKA">ঢাকা মেট্রো এলাকা</option>
+            </select>
+          </div>
+          <div>
+            <label>বিলের ধরন</label>
+            <select id="pb-type" onchange="calcPayBill()">
+              <option value="MONTHLY">মাসিক বেতন বিল</option>
+              <option value="EID">উৎসব ভাতা (১০০%)</option>
+              <option value="BOISHAKHI">বৈশাখী ভাতা (২০%)</option>
+              <option value="RRL">শ্রান্তি বিনোদন ভাতা (RRL)</option>
+            </select>
+          </div>
+          <div>
+            <label>জিপিএফ চাঁদা (%)</label>
+            <input type="number" id="pb-gpf" value="10" min="0" max="30" oninput="calcPayBill()" />
+          </div>
+          <div>
+            <label>শিক্ষা সহায়ক সন্তান (০-২)</label>
+            <select id="pb-child" onchange="calcPayBill()">
+              <option value="0">০ জন</option>
+              <option value="1" selected>১ জন (৳ ৫০০)</option>
+              <option value="2">২ জন (৳ ১,০০০)</option>
+            </select>
+          </div>
+          <div>
+            <label>জিপিএফ ঋণ কিস্তি (৳)</label>
+            <input type="number" id="pb-loan" value="0" oninput="calcPayBill()" />
+          </div>
+          <div>
+            <label>আয়কর TDS (৳)</label>
+            <input type="number" id="pb-tax" value="0" oninput="calcPayBill()" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">বেতন বিল বিবরণী</h3>
+        <div id="pb-breakdown"></div>
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap" class="no-print">
+          <button class="btn btn-primary" onclick="window.print()">প্রিন্ট / সেভ PDF</button>
+          <button class="btn btn-outline" onclick="copyText('pb-breakdown')">কপি করুন</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GPF TAB -->
+    <section id="tab-gpf" class="hidden">
+      <div class="summary-banner">
+        <div>৩০শে জুন সমাপনী জিপিএফ স্থিতি</div>
+        <div class="amount" id="gpf-closing">৳ 0</div>
+        <div class="summary-grid">
+          <div><small>বার্ষিক মুনাফা (Interest)</small><div id="gpf-interest" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+          <div><small>সর্বোচ্চ ঋণযোগ্য (৮০%)</small><div id="gpf-advance" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+        </div>
+      </div>
+      <div class="card no-print">
+        <div class="grid-2">
+          <div><label>প্রারম্ভিক জের (১ জুলাই)</label><input type="number" id="gpf-open" value="350000" oninput="calcGpf()" /></div>
+          <div><label>মাসিক চাঁদা (৳)</label><input type="number" id="gpf-sub" value="3000" oninput="calcGpf()" /></div>
+          <div><label>মাসিক ঋণ কিস্তি ফেরত (৳)</label><input type="number" id="gpf-rec" value="0" oninput="calcGpf()" /></div>
+          <div><label>মুনাফার হার (%)</label><input type="number" id="gpf-rate" value="13" step="0.5" oninput="calcGpf()" /></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">মাসভিত্তিক জিপিএফ খতিয়ান (জুলাই–জুন)</h3>
+        <table><thead><tr><th>মাস</th><th>মাসিক জমা</th><th>স্থিতি</th></tr></thead><tbody id="gpf-table"></tbody></table>
+      </div>
+    </section>
+
+    <!-- PENSION TAB -->
+    <section id="tab-pension" class="hidden">
+      <div class="summary-banner">
+        <div>এককালীন আনুতোষিক (Gratuity)</div>
+        <div class="amount" id="pen-gratuity">৳ 0</div>
+        <div class="summary-grid">
+          <div><small>মাসিক নিট পেনশন (ভাতাসহ)</small><div id="pen-monthly" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+          <div><small>পেনশন হার</small><div id="pen-pct" style="font-weight:700;font-size:1.1rem">90%</div></div>
+        </div>
+      </div>
+      <div class="card no-print">
+        <div class="grid-2">
+          <div><label>শেষ মূল বেতন (Last Basic)</label><input type="number" id="pen-basic" value="45000" oninput="calcPension()" /></div>
+          <div><label>মোট চাকরিকাল (৫-২৫+ বছর)</label><input type="number" id="pen-years" value="25" min="5" max="35" oninput="calcPension()" /></div>
+          <div>
+            <label>বয়স</label>
+            <select id="pen-age" onchange="calcPension()">
+              <option value="59">৬৫ বছরের নিচে (চিকিৎসা ৳ ১,৫০০)</option>
+              <option value="65">৬৫ বছর বা তদূর্ধ্ব (চিকিৎসা ৳ ২,৫০০)</option>
+            </select>
+          </div>
+          <div><label>জন্ম তারিখ (PRL হিসাব)</label><input type="date" id="pen-dob" value="1972-07-15" onchange="calcPension()" /></div>
+        </div>
+      </div>
+      <div class="card" id="pen-details"></div>
+    </section>
+
+    <!-- ARREAR TAB -->
+    <section id="tab-arrear" class="hidden">
+      <div class="summary-banner">
+        <div>নিট প্রাপ্য বকেয়া বেতন</div>
+        <div class="amount" id="arr-net">৳ 0</div>
+        <div class="summary-grid">
+          <div><small>মোট বকেয়া (Gross)</small><div id="arr-gross" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+          <div><small>জিপিএফ কর্তন</small><div id="arr-gpf" style="font-weight:700;font-size:1.1rem">৳ 0</div></div>
+        </div>
+      </div>
+      <div class="card no-print">
+        <div class="grid-2">
+          <div><label>শুরুর তারিখ</label><input type="date" id="arr-start" value="2026-07-01" onchange="calcArrear()" /></div>
+          <div><label>শেষ তারিখ</label><input type="date" id="arr-end" value="2026-10-31" onchange="calcArrear()" /></div>
+          <div><label>উত্তোলিত মূল বেতন (Drawn)</label><input type="number" id="arr-drawn" value="22000" oninput="calcArrear()" /></div>
+          <div><label>প্রাপ্য মূল বেতন (Due)</label><input type="number" id="arr-due" value="24260" oninput="calcArrear()" /></div>
+          <div>
+            <label>বাড়ি ভাড়া এলাকা</label>
+            <select id="arr-tier" onchange="calcArrear()">
+              <option value="OTHER">অন্যান্য জেলা ও উপজেলা</option>
+              <option value="CITY">বিভাগীয় শহর</option>
+              <option value="DHAKA">ঢাকা মেট্রো</option>
+            </select>
+          </div>
+          <div><label>জিপিএফ কর্তন (%)</label><input type="number" id="arr-gpf-pct" value="10" oninput="calcArrear()" /></div>
+        </div>
+      </div>
+      <div class="card" id="arr-details"></div>
+    </section>
+
+    <!-- APPLICATIONS TAB -->
+    <section id="tab-apps" class="hidden">
+      <div class="card no-print">
+        <div class="grid-2">
+          <div>
+            <label>আবেদনের ধরন</label>
+            <select id="app-type" onchange="renderLetter()">
+              <option value="RRL">শ্রান্তি ও বিনোদন ছুটি (RRL)</option>
+              <option value="CL">নৈমিত্তিক ছুটি (CL)</option>
+              <option value="EL">অর্জিত ছুটি (EL)</option>
+              <option value="ML">চিকিৎসা ছুটি (ML)</option>
+              <option value="JOINING">ছুটি শেষে কর্মস্থলে যোগদানপত্র</option>
+              <option value="GPF">জিপিএফ অগ্রিমের আবেদন</option>
+              <option value="PRL">পিআরএল (PRL) ছুটি আবেদন</option>
+            </select>
+          </div>
+          <div><label>প্রাপক (বরাবর)</label><input type="text" id="app-auth" value="উপজেলা নির্বাহী অফিসার / দপ্তর প্রধান" oninput="renderLetter()" /></div>
+          <div><label>আবেদনকারীর নাম</label><input type="text" id="app-name" placeholder="মোঃ ..." oninput="renderLetter()" /></div>
+          <div><label>পদবি</label><input type="text" id="app-desig" placeholder="সহকারী ..." oninput="renderLetter()" /></div>
+          <div><label>দপ্তর / কর্মস্থল</label><input type="text" id="app-office" placeholder="দপ্তরের নাম" oninput="renderLetter()" /></div>
+          <div><label>ছুটি শুরুর তারিখ</label><input type="date" id="app-start" value="2026-11-20" onchange="renderLetter()" /></div>
+          <div><label>ছুটি শেষের তারিখ</label><input type="date" id="app-end" value="2026-12-04" onchange="renderLetter()" /></div>
+          <div><label>কারণ / স্মারক নং (যোগদানের ক্ষেত্রে)</label><input type="text" id="app-reason" placeholder="পারিবারিক প্রয়োজনে / স্মারক নং..." oninput="renderLetter()" /></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="letter-preview" id="letter-box"></div>
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap" class="no-print">
+          <button class="btn btn-primary" onclick="copyLetter()">আবেদনপত্র কপি করুন</button>
+          <button class="btn btn-outline" onclick="window.print()">প্রিন্ট / সেভ PDF</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const grades = [
+      [1,78000],[2,66000],[3,56500],[4,50000],[5,43000],
+      [6,35500],[7,29000],[8,23000],[9,22000],[10,16000],
+      [11,12500],[12,11300],[13,11000],[14,10200],[15,9700],
+      [16,9300],[17,9000],[18,8800],[19,8500],[20,8250]
+    ];
+    let isBn = true;
+
+    const gradeSel = document.getElementById('pb-grade');
+    grades.forEach(([g, min]) => {
+      const opt = document.createElement('option');
+      opt.value = g;
+      opt.textContent = `Grade ${g} (Min ৳ ${min.toLocaleString()})`;
+      if (g === 9) opt.selected = true;
+      gradeSel.appendChild(opt);
+    });
+
+    function fmt(n) { return '৳ ' + Math.round(n).toLocaleString('en-IN'); }
+
+    function showTab(name, btn) {
+      document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+      document.getElementById('tab-' + name).classList.remove('hidden');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function toggleLang() {
+      isBn = !isBn;
+      document.getElementById('langBtn').textContent = isBn ? 'English' : 'বাংলা';
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.textContent = isBn ? b.dataset.bn : b.dataset.en;
+      });
+      renderLetter();
+    }
+
+    function calcHra(basic, tier) {
+      if (basic <= 0) return 0;
+      if (basic <= 9700) return tier === 'DHAKA' ? Math.max(Math.round(basic*0.65),5600) : tier === 'CITY' ? Math.max(Math.round(basic*0.55),5000) : Math.max(Math.round(basic*0.50),4500);
+      if (basic <= 16000) return tier === 'DHAKA' ? Math.max(Math.round(basic*0.60),6400) : tier === 'CITY' ? Math.max(Math.round(basic*0.50),5400) : Math.max(Math.round(basic*0.45),4800);
+      if (basic <= 35500) return tier === 'DHAKA' ? Math.max(Math.round(basic*0.55),9600) : tier === 'CITY' ? Math.max(Math.round(basic*0.45),8000) : Math.max(Math.round(basic*0.40),7200);
+      return tier === 'DHAKA' ? Math.max(Math.round(basic*0.50),19500) : tier === 'CITY' ? Math.max(Math.round(basic*0.40),16000) : Math.max(Math.round(basic*0.35),14200);
+    }
+
+    function onGradeChange() {
+      const g = parseInt(gradeSel.value);
+      const found = grades.find(x => x[0] === g);
+      if (found) document.getElementById('pb-basic').value = found[1];
+      calcPayBill();
+    }
+
+    function calcPayBill() {
+      const g = parseInt(gradeSel.value);
+      const basic = parseFloat(document.getElementById('pb-basic').value) || 0;
+      const tier = document.getElementById('pb-tier').value;
+      const type = document.getElementById('pb-type').value;
+      const gpfPct = parseFloat(document.getElementById('pb-gpf').value) || 0;
+      const child = parseInt(document.getElementById('pb-child').value) || 0;
+      const loan = parseFloat(document.getElementById('pb-loan').value) || 0;
+      const tax = parseFloat(document.getElementById('pb-tax').value) || 0;
+
+      let rows = [];
+      let gross = 0, ded = 0;
+
+      if (type === 'BOISHAKHI') {
+        gross = Math.round(basic * 0.20);
+        rows.push(['বাংলা নববর্ষ ভাতা (২০%)', fmt(gross), '']);
+      } else if (type === 'EID' || type === 'RRL') {
+        gross = Math.round(basic);
+        rows.push([type === 'EID' ? 'উৎসব ভাতা (১০০% মূল বেতন)' : 'শ্রান্তি ও বিনোদন ভাতা', fmt(gross), '']);
+      } else {
+        const hra = calcHra(basic, tier);
+        const med = 1500;
+        const edu = child * 500;
+        const tiffin = g >= 11 ? 200 : 0;
+        const wash = g >= 17 ? 100 : 0;
+        const special = Math.max(Math.round(basic * 0.05), g >= 10 ? 1500 : 1000);
+        gross = basic + hra + med + edu + tiffin + wash + special;
+
+        const gpf = Math.round(basic * (gpfPct / 100));
+        const ben = Math.min(Math.round(basic * 0.01), 150);
+        const ins = g <= 9 ? 100 : 40;
+        ded = gpf + loan + ben + ins + tax;
+
+        rows.push(['মূল বেতন (Basic Pay)', fmt(basic), '']);
+        rows.push(['বাড়ি ভাড়া ভাতা (HRA)', fmt(hra), '']);
+        rows.push(['চিকিৎসা ভাতা', fmt(med), '']);
+        if (edu > 0) rows.push(['শিক্ষা সহায়ক ভাতা', fmt(edu), '']);
+        if (tiffin > 0) rows.push(['টিফিন ভাতা', fmt(tiffin), '']);
+        if (wash > 0) rows.push(['ধোলাই ভাতা', fmt(wash), '']);
+        rows.push(['বিশেষ সুবিধা (৫%)', fmt(special), '']);
+        rows.push(['মোট প্রাপ্য (Gross)', fmt(gross), 'kv-total']);
+        rows.push(['জিপিএফ চাঁদা (' + gpfPct + '%)', '-' + fmt(gpf), 'kv-ded']);
+        if (loan > 0) rows.push(['জিপিএফ ঋণ কিস্তি', '-' + fmt(loan), 'kv-ded']);
+        rows.push(['কল্যাণ তহবিল ও যৌথ বীমা', '-' + fmt(ben + ins), 'kv-ded']);
+        if (tax > 0) rows.push(['আয়কর (TDS)', '-' + fmt(tax), 'kv-ded']);
+        rows.push(['নিট প্রাপ্য (Net Payable)', fmt(Math.max(0, gross - ded)), 'kv-total']);
+      }
+
+      const net = Math.max(0, gross - ded);
+      document.getElementById('pb-net').textContent = fmt(net);
+      document.getElementById('pb-gross').textContent = fmt(gross);
+      document.getElementById('pb-ded').textContent = fmt(ded);
+      document.getElementById('pb-breakdown').innerHTML = rows.map(r =>
+        `<div class="kv-row"><span>${r[0]}</span><span class="kv-val ${r[2]}">${r[1]}</span></div>`
+      ).join('');
+    }
+
+    function calcGpf() {
+      const open = parseFloat(document.getElementById('gpf-open').value) || 0;
+      const sub = parseFloat(document.getElementById('gpf-sub').value) || 0;
+      const rec = parseFloat(document.getElementById('gpf-rec').value) || 0;
+      const rate = parseFloat(document.getElementById('gpf-rate').value) || 13;
+      const months = ['জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর','জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন'];
+
+      let bal = open, prod = 0, html = '';
+      months.forEach(m => {
+        bal += sub + rec;
+        prod += (bal - sub - rec);
+        html += `<tr><td>${m}</td><td>${fmt(sub + rec)}</td><td>${fmt(bal)}</td></tr>`;
+      });
+      const interest = Math.round((prod / 12) * (rate / 100));
+      const closing = bal + interest;
+      document.getElementById('gpf-closing').textContent = fmt(closing);
+      document.getElementById('gpf-interest').textContent = fmt(interest);
+      document.getElementById('gpf-advance').textContent = fmt(closing * 0.8);
+      document.getElementById('gpf-table').innerHTML = html;
+    }
+
+    function calcPension() {
+      const basic = parseFloat(document.getElementById('pen-basic').value) || 0;
+      const yrs = Math.min(35, Math.max(5, parseInt(document.getElementById('pen-years').value) || 25));
+      const age = parseInt(document.getElementById('pen-age').value) || 59;
+      const dob = document.getElementById('pen-dob').value;
+      const pctTable = {5:21,6:24,7:27,8:30,9:33,10:36,11:39,12:43,13:47,14:51,15:54,16:57,17:60,18:63,19:66,20:70,21:74,22:78,23:82,24:86};
+      const pct = yrs >= 25 ? 90 : (pctTable[yrs] || 90);
+      const rate = yrs < 10 ? 265 : yrs < 15 ? 260 : yrs < 20 ? 245 : 230;
+      const gross = Math.round(basic * (pct / 100));
+      const half = Math.round(gross * 0.5);
+      const gratuity = half * rate;
+      const med = age >= 65 ? 2500 : 1500;
+      const monthly = (gross - half) + med;
+
+      let prlStr = '—';
+      if (dob) {
+        const d = new Date(dob);
+        d.setFullYear(d.getFullYear() + 59);
+        prlStr = d.toISOString().slice(0,10);
+      }
+
+      document.getElementById('pen-gratuity').textContent = fmt(gratuity);
+      document.getElementById('pen-monthly').textContent = fmt(monthly);
+      document.getElementById('pen-pct').textContent = pct + '%';
+      document.getElementById('pen-details').innerHTML = `
+        <div class="kv-row"><span>মোট পেনশন (${pct}%)</span><span class="kv-val">${fmt(gross)}</span></div>
+        <div class="kv-row"><span>বাধ্যতামূলক সমর্পণ (৫০%)</span><span class="kv-val">${fmt(half)}</span></div>
+        <div class="kv-row"><span>আনুতোষিকের হার</span><span class="kv-val">৳ ${rate} / টাকা</span></div>
+        <div class="kv-row"><span>চিকিৎসা ভাতা</span><span class="kv-val">${fmt(med)}</span></div>
+        <div class="kv-row"><span>মাসিক নিট পেনশন</span><span class="kv-val kv-total">${fmt(monthly)}</span></div>
+        <div class="kv-row"><span>এককালীন আনুতোষিক</span><span class="kv-val kv-total">${fmt(gratuity)}</span></div>
+        <div class="kv-row"><span>সম্ভাব্য পিআরএল (PRL) শুরু</span><span class="kv-val">${prlStr}</span></div>
+      `;
+    }
+
+    function calcArrear() {
+      const s = new Date(document.getElementById('arr-start').value);
+      const e = new Date(document.getElementById('arr-end').value);
+      const drawnB = parseFloat(document.getElementById('arr-drawn').value) || 0;
+      const dueB = parseFloat(document.getElementById('arr-due').value) || 0;
+      const tier = document.getElementById('arr-tier').value;
+      const gpfPct = parseFloat(document.getElementById('arr-gpf-pct').value) || 0;
+
+      if (isNaN(s) || isNaN(e) || e < s) return;
+      const drawnHra = calcHra(drawnB, tier);
+      const dueHra = calcHra(dueB, tier);
+      let months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth()) + 1;
+      const totalDrawn = (drawnB + drawnHra) * months;
+      const totalDue = (dueB + dueHra) * months;
+      const gross = Math.max(0, totalDue - totalDrawn);
+      const gpf = Math.round(Math.max(0, dueB - drawnB) * months * (gpfPct / 100));
+      const net = Math.max(0, gross - gpf);
+
+      document.getElementById('arr-net').textContent = fmt(net);
+      document.getElementById('arr-gross').textContent = fmt(gross);
+      document.getElementById('arr-gpf').textContent = fmt(gpf);
+      document.getElementById('arr-details').innerHTML = `
+        <div class="kv-row"><span>হিসাবকৃত মাস</span><span class="kv-val">${months} মাস</span></div>
+        <div class="kv-row"><span>মোট প্রাপ্য ছিল (Due)</span><span class="kv-val">${fmt(totalDue)}</span></div>
+        <div class="kv-row"><span>মোট উত্তোলিত (Drawn)</span><span class="kv-val">${fmt(totalDrawn)}</span></div>
+        <div class="kv-row"><span>জিপিএফ কর্তন (${gpfPct}%)</span><span class="kv-val kv-ded">-${fmt(gpf)}</span></div>
+        <div class="kv-row"><span>নিট প্রাপ্য বকেয়া</span><span class="kv-val kv-total">${fmt(net)}</span></div>
+      `;
+    }
+
+    function renderLetter() {
+      const type = document.getElementById('app-type').value;
+      const auth = document.getElementById('app-auth').value || 'দপ্তর প্রধান';
+      const name = document.getElementById('app-name').value || '[আপনার নাম]';
+      const desig = document.getElementById('app-desig').value || '[পদবি]';
+      const office = document.getElementById('app-office').value || '[দপ্তরের নাম]';
+      const start = document.getElementById('app-start').value;
+      const end = document.getElementById('app-end').value;
+      const reason = document.getElementById('app-reason').value || 'পারিবারিক প্রয়োজনে';
+      const today = new Date().toLocaleDateString('en-GB');
+      const days = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
+
+      const subjects = {
+        RRL: 'বিষয়: শ্রান্তি ও বিনোদন ছুটি এবং ভাতা মঞ্জুরের আবেদন।',
+        CL: 'বিষয়: নৈমিত্তিক ছুটি (CL) মঞ্জুরের আবেদন।',
+        EL: 'বিষয়: গড় বেতনে অর্জিত ছুটি (EL) মঞ্জুরের আবেদন।',
+        ML: 'বিষয়: চিকিৎসা ছুটি (Medical Leave) মঞ্জুরের আবেদন।',
+        JOINING: 'বিষয়: ছুটি ভোগ শেষে কর্মস্থলে যোগদানপত্র।',
+        GPF: 'বিষয়: সাধারণ ভবিষ্য তহবিল (GPF) হতে অগ্রিম উত্তোলনের আবেদন।',
+        PRL: 'বিষয়: অবসর উত্তর ছুটি (PRL) মঞ্জুরের আবেদন।'
+      };
+
+      const bodies = {
+        RRL: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, আমি ${office}-এ "${desig}" পদে কর্মরত আছি। বিধি মোতাবেক ৩ বছর চাকরিকাল পূর্ণ হওয়ায় আগামী ${start} তারিখ হতে ${end} তারিখ পর্যন্ত মোট ${days} দিন শ্রান্তি ও বিনোদন ছুটি এবং ১ মাসের মূল বেতনের সমপরিমাণ ভাতা মঞ্জুরের জন্য বিনীত অনুরোধ জানাচ্ছি।`,
+        CL: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, আমি ${office}-এ "${desig}" পদে কর্মরত আছি। ${reason} আগামী ${start} হতে ${end} তারিখ পর্যন্ত মোট ${days} দিন কর্মস্থলে উপস্থিত থাকা সম্ভব নয়। অনুগ্রহপূর্বক উক্ত ${days} দিনের নৈমিত্তিক ছুটি মঞ্জুর করে বাধিত করবেন।`,
+        EL: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, আমি ${office}-এ "${desig}" পদে কর্মরত আছি। ${reason} আগামী ${start} হতে ${end} তারিখ পর্যন্ত মোট ${days} দিন গড় বেতনে অর্জিত ছুটি মঞ্জুর করে বাধিত করবেন।`,
+        ML: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, আমি ${office}-এ "${desig}" পদে কর্মরত আছি। অসুস্থতাজনিত কারণে চিকিৎসকের পরামর্শ অনুযায়ী আগামী ${start} হতে ${end} তারিখ পর্যন্ত মোট ${days} দিনের চিকিৎসা ছুটি মঞ্জুরের অনুরোধ করছি।`,
+        JOINING: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, স্মারক নং- ${reason} মোতাবেক অনুমোদিত ${start} হতে ${end} তারিখ পর্যন্ত মোট ${days} দিনের ছুটি ভোগ শেষে অদ্য পূর্বাহ্নে আমি আমার কর্মস্থল ${office}-এ পুনরায় যোগদান করলাম।`,
+        GPF: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, আমি ${office}-এ "${desig}" পদে কর্মরত আছি। ${reason} আমার জিপিএফ তহবিল হতে বিধি মোতাবেক অগ্রিম উত্তোলনের মঞ্জুরি প্রদান করে বাধিত করবেন।`,
+        PRL: `যথাযথ সম্মান পূর্বক নিবেদন এই যে, সরকারি চাকরি আইন অনুযায়ী ৫৯ বছর বয়স পূর্ণ হওয়ায় আগামী ${start} হতে ${end} তারিখ পর্যন্ত ১ বছর মেয়াদী অবসর উত্তর ছুটি (PRL) মঞ্জুর করে বাধিত করবেন।`
+      };
+
+      document.getElementById('letter-box').textContent =
+`তারিখ: ${today}
+
+বরাবর,
+${auth}
+${office}
+
+${subjects[type]}
+
+জনাব,
+${bodies[type]}
+
+বিনীত নিবেদক,
+
+___________________
+${name}
+${desig}
+${office}`;
+    }
+
+    function copyLetter() {
+      navigator.clipboard.writeText(document.getElementById('letter-box').textContent);
+      alert('আবেদনপত্র কপি হয়েছে!');
+    }
+    function copyText(id) {
+      navigator.clipboard.writeText(document.getElementById(id).innerText);
+      alert('কপি হয়েছে!');
+    }
+
+    calcPayBill(); calcGpf(); calcPension(); calcArrear(); renderLetter();
+  </script>
+</body>
+</html>

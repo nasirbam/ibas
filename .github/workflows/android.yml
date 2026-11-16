@@ -1,10 +1,20 @@
-name: Android CI
+name: Android CI & GitHub Pages
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build-and-test:
@@ -34,8 +44,33 @@ jobs:
       - name: Build Debug APK
         run: gradle assembleDebug
 
-      - name: Upload Debug APK
+      - name: Upload Debug APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: ibas-sahayak-debug-apk
           path: app/build/outputs/apk/debug/*.apk
+
+      - name: Prepare GitHub Pages site with APK
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p _site
+          cp docs/index.html _site/index.html
+          cp app/build/outputs/apk/debug/*.apk _site/iBAS-Sahayak.apk
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy-pages:
+    if: github.event_name != 'pull_request'
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

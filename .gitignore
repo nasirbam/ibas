@@ -4,6 +4,7 @@ build/
 /build
 /app/build
 .build-outputs/
+_site/
 *.apk
 *.ap_
 *.aab
